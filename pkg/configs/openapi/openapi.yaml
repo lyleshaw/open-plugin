@@ -1,0 +1,207 @@
+openapi: 3.0.1
+info:
+  title: ChatService
+  version: 1.0.0
+  description: ChatService API
+paths:
+  /api/chat:
+    get:
+      summary: GetChat
+      operationId: GetChat
+      parameters:
+        - name: conversation_id
+          in: query
+          description: conversation_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResp'
+    post:
+      summary: PostChat
+      operationId: PostChat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostChatReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSE'
+  /api/plugins:
+    get:
+      summary: GetPlugins
+      operationId: GetPlugins
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PluginsResp'
+  /api/plugin:
+    get:
+      summary: GetPlugin
+      operationId: GetPlugin
+      parameters:
+        - name: plugin_id
+          in: query
+          description: plugin_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PluginResp'
+    post:
+      summary: PostPlugin
+      operationId: PostPlugin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PluginReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PluginResp'
+    delete:
+      summary: DeletePlugin
+      operationId: DeletePlugin
+      parameters:
+        - name: plugin_id
+          in: query
+          description: plugin_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResp'
+components:
+  schemas:
+    Chat:
+      type: object
+      properties:
+        chat_id:
+          type: integer
+        conversation_id:
+          type: string
+        plugin_names:
+          type: array
+          items:
+            type: string
+        chat_content:
+          type: string
+        chat_model:
+          type: string
+        user_id:
+          type: integer
+        is_deleted:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    Plugin:
+      type: object
+      properties:
+        plugin_id:
+          type: integer
+        plugin_name:
+          type: string
+        plugin_config_url:
+          type: string
+        plugin_openapi_url:
+          type: string
+        plugin_config:
+          type: string
+        plugin_openapi:
+          type: string
+        is_deleted:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type: string
+    ChatResp:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Chat'
+    SSE:
+      type: object
+    PluginsResp:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Plugin'
+    PluginResp:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Plugin'
+    PluginReq:
+      type: object
+      properties:
+        plugin_url:
+          type: string
+    GetChatReq:
+      type: object
+      properties:
+        conversation_id:
+          type: string
+    PostChatReq:
+      type: object
+      properties:
+        conversation_id:
+          type: string
+        plugin_names:
+          type: array
+          items:
+            type: string
+        chat_model:
+          type: string
+        prompt:
+          type: string
+    GetPluginsReq:
+      type: object
+    GetPluginReq:
+      type: object
+      properties:
+        plugin_id:
+          type: integer
