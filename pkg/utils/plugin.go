@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -400,8 +401,8 @@ func MixResponsesByAnthropic(client *anthropic.Client, pluginResponse string, us
 
 func main() {
 	ctx := context.Background()
-	config := openai.DefaultConfig(llm_openai.API_KEY)
-	config.BaseURL = llm_openai.BASE_URL
+	config := openai.DefaultConfig(os.Getenv("API_KEY"))
+	config.BaseURL = os.Getenv("BASE_URL")
 	client := openai.NewClientWithConfig(config)
 	pluginURL := "https://search.aireview.tech/.well-known/ai-plugin.json"
 	prompt := "杭州今天天气怎么样？"

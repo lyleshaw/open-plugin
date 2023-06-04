@@ -3,21 +3,19 @@
 package main
 
 import (
-	"github.com/bytedance/gopkg/util/logger"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/joho/godotenv"
 	"github.com/lyleshaw/open-plugin/biz/dal"
 	"github.com/lyleshaw/open-plugin/biz/mw"
+	"os"
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		logger.Fatalf("Some error occurred. Err: %s", err)
-	}
+	_ = godotenv.Load(".env")
 
 	dal.Init()
-	h := server.New(server.WithHostPorts(":7654"))
+	port := ":" + os.Getenv("PORT")
+	h := server.New(server.WithHostPorts(port))
 	h.Use(mw.Cors())
 	register(h)
 	h.Spin()
